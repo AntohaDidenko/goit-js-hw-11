@@ -27,6 +27,7 @@ async function onSearch(event) {
   try {
     event.preventDefault();
     refs.gallery.innerHTML = '';
+    newLoadMoreBtn.hide();
 
     const searchQuery = event.currentTarget.elements.searchQuery.value.trim('');
 
@@ -47,10 +48,6 @@ async function onSearch(event) {
         return;
       }
 
-      if (hits.length < 40) {
-        newLoadMoreBtn.hide();
-      }
-
       markupGallery({ hits, totalHits });
       Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
     } else {
@@ -63,17 +60,16 @@ async function onSearch(event) {
 
 async function onLoadMore() {
   try {
-    newLoadMoreBtn.show();
     newLoadMoreBtn.disable();
     const { hits, totalHits } = await getDateFromApiServices();
 
     if (newApiServices.totalArticle() < totalHits) {
       markupGallery({ hits, totalHits });
     } else {
-      if (newApiServices.totalArticle() - totalHits < hits.length) {
+      if (newApiServices.totalArticle() === Math.ceil(totalHits / 40)) {
+        newLoadMoreBtn.hide();
         markupGallery({ hits, totalHits });
       }
-      newLoadMoreBtn.hide();
 
       Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results."
