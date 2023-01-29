@@ -6,14 +6,12 @@ import ApiServices from './script/api-services.js';
 import RenderList from './script/render-list.js';
 import LoadMoreBtn from './script/load-more-btn.js';
 
-
 const refs = {
   form: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
   buttonSearchForm: document.querySelector('#search-form button'),
   buttonLoadMore: document.querySelector('.load-more'),
 };
-
 
 const newApiServices = new ApiServices();
 const newRenderList = new RenderList(refs.gallery);
@@ -22,10 +20,6 @@ const newLoadMoreBtn = new LoadMoreBtn({
   hidden: true,
 });
 
-
-refs.form.addEventListener('input', () => {
-  refs.buttonSearchForm.disabled = false;
-});
 refs.form.addEventListener('submit', onSearch);
 refs.buttonLoadMore.addEventListener('click', onLoadMore);
 
@@ -36,11 +30,10 @@ async function onSearch(event) {
 
     const searchQuery = event.currentTarget.elements.searchQuery.value.trim('');
 
-    if (searchQuery != '') {
+    if (searchQuery !== '') {
       newLoadMoreBtn.show();
       newLoadMoreBtn.disable();
 
-      refs.buttonSearchForm.disabled = true;
       newApiServices.query = searchQuery;
       newApiServices.resetPage();
 
@@ -52,6 +45,10 @@ async function onSearch(event) {
           'Sorry, there are no images matching your search query. Please try again.'
         );
         return;
+      }
+
+      if (hits.length < 40) {
+        newLoadMoreBtn.hide();
       }
 
       markupGallery({ hits, totalHits });
@@ -69,7 +66,7 @@ async function onLoadMore() {
     newLoadMoreBtn.show();
     newLoadMoreBtn.disable();
     const { hits, totalHits } = await getDateFromApiServices();
-    console.log(newApiServices.totalArticle());
+
     if (newApiServices.totalArticle() < totalHits) {
       markupGallery({ hits, totalHits });
     } else {
@@ -108,4 +105,3 @@ function markupGallery({ hits }) {
 
   newLoadMoreBtn.enable();
 }
-
