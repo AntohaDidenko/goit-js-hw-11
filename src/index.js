@@ -43,6 +43,10 @@ async function onSearch(event) {
 
       const { hits, totalHits } = await getDateFromApiServices();
 
+      if (hits.length < 40) {
+        newLoadMoreBtn.hide();
+      }
+
       if (hits.length === 0) {
         newLoadMoreBtn.hide();
         Notiflix.Notify.failure(
@@ -63,7 +67,6 @@ async function onSearch(event) {
 
 async function onLoadMore() {
   try {
-    newLoadMoreBtn.show();
     newLoadMoreBtn.disable();
     const { hits, totalHits } = await getDateFromApiServices();
     console.log(newApiServices.totalArticle());
@@ -94,7 +97,7 @@ async function getDateFromApiServices() {
 }
 
 function markupGallery({ hits }) {
-  newLoadMoreBtn.show();
+  // newLoadMoreBtn.show();
   newLoadMoreBtn.disable();
   newRenderList.params = hits;
 
