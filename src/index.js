@@ -6,7 +6,6 @@ import ApiServices from './script/api-services.js';
 import RenderList from './script/render-list.js';
 import LoadMoreBtn from './script/load-more-btn.js';
 
-
 const refs = {
   form: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
@@ -14,14 +13,12 @@ const refs = {
   buttonLoadMore: document.querySelector('.load-more'),
 };
 
-
 const newApiServices = new ApiServices();
 const newRenderList = new RenderList(refs.gallery);
 const newLoadMoreBtn = new LoadMoreBtn({
   selector: '.load-more',
   hidden: true,
 });
-
 
 refs.form.addEventListener('input', () => {
   refs.buttonSearchForm.disabled = false;
@@ -36,7 +33,7 @@ async function onSearch(event) {
 
     const searchQuery = event.currentTarget.elements.searchQuery.value.trim('');
 
-    if (searchQuery != '') {
+    if (searchQuery !== '') {
       newLoadMoreBtn.show();
       newLoadMoreBtn.disable();
 
@@ -108,4 +105,3 @@ function markupGallery({ hits }) {
 
   newLoadMoreBtn.enable();
 }
-
