@@ -32,13 +32,16 @@ async function onSearch(event) {
     const searchQuery = event.currentTarget.elements.searchQuery.value.trim('');
 
     if (searchQuery !== '') {
-      newLoadMoreBtn.show();
       newLoadMoreBtn.disable();
 
       newApiServices.query = searchQuery;
       newApiServices.resetPage();
 
       const { hits, totalHits } = await getDateFromApiServices();
+
+      if (totalHits > 40) {
+        newLoadMoreBtn.show();
+      }
 
       if (hits.length === 0) {
         newLoadMoreBtn.hide();
@@ -60,16 +63,17 @@ async function onSearch(event) {
 
 async function onLoadMore() {
   try {
+    newApiServices.incrementPage();
     newLoadMoreBtn.disable();
     const { hits, totalHits } = await getDateFromApiServices();
 
     if (newApiServices.totalArticle() < totalHits) {
       markupGallery({ hits, totalHits });
     } else {
-      if (newApiServices.totalArticle() === Math.ceil(totalHits / 40)) {
+      if (newApiServices.pageValue() === Math.ceil(totalHits / 40)) {
         newLoadMoreBtn.hide();
-        markupGallery({ hits, totalHits });
       }
+      markupGallery({ hits, totalHits });
 
       Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results."

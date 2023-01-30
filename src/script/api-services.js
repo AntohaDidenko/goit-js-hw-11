@@ -25,8 +25,6 @@ export default class ApiServices {
           this.per_page
         }`
       ).then(({ data }) => {
-        this.incrementPage();
-
         return { hits: data.hits, totalHits: data.totalHits };
       });
     } catch (error) {
@@ -45,6 +43,9 @@ export default class ApiServices {
   }
   get query() {
     return this.searchQuery;
+  }
+  get pageValue() {
+    return this.page;
   }
   set query(newQuery) {
     this.searchQuery = newQuery;
