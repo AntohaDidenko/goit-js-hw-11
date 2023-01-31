@@ -98,7 +98,7 @@ async function getDateFromApiServices() {
 
 function markupGallery({ hits }) {
   // newLoadMoreBtn.show();
-  newLoadMoreBtn.disable();
+  // newLoadMoreBtn.disable();
   newRenderList.params = hits;
 
   newRenderList.renderGallery();
